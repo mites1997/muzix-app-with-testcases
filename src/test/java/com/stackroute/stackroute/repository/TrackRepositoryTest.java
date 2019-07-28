@@ -26,9 +26,9 @@ import java.util.List;
     public void setUp()
     {
       track1 = new Track();
-      // track1.setTrackID(30);
-      track1.setName("Believe");
-      track1.setComment("Cher");
+      track1.setId(30);
+      track1.setName("Mites");
+      track1.setComment("OK");
     }
     @After
     public void tearDown(){
@@ -38,24 +38,52 @@ import java.util.List;
     public void testSaveTrack(){
       trackRepository.save(track1);
       Track fetchUser = trackRepository.findById(track1.getId()).get();
-      Assert.assertEquals(4,fetchUser.getId());
+      Assert.assertEquals(30,fetchUser.getId());
     }
     @Test
     public void testSaveTrackFailure(){
-      Track testUser = new Track("Believe Me Natalie","The Killers");
+      Track testUser = new Track("good","The Happy Song");
       trackRepository.save(track1);
       Track fetchUser = trackRepository.findById(track1.getId()).get();
-      Assert.assertNotSame(new Track("Believe Me Natalie","The Killers"),track1);
+      Assert.assertNotSame(new Track("good","The Happy Song"),track1);
+    }
+    @Test
+    public void testUpdateComment(){
+      trackRepository.save(track1);
+      track1.setComment("good");
+      trackRepository.save(track1);
+      String comment = (trackRepository.findById(30).get()).getComment();
+      Assert.assertEquals("good", comment);
+    }
+    @Test
+    public void testUpdateCommentFailure(){
+      trackRepository.save(track1);
+      track1.setComment("good");
+      String comment = (trackRepository.findById(30).get()).getComment();
+      Assert.assertNotEquals("good", comment);
     }
     @Test
     public void testGetAllTrack(){
-      Track u = new Track(10,"Johny12","102");
-      Track u1 = new Track(11,"Harry12","103");
-      trackRepository.save(u);
-      trackRepository.save(u1);
+      Track tracktest = new Track(10,"Jones","nice");
+      Track tracktest2 = new Track(11,"Gary","average");
+      trackRepository.save(tracktest);
+      trackRepository.save(tracktest2);
       List<Track> list = trackRepository.findAll();
-      Assert.assertEquals("Johny12",list.get(0).getName());
+      Assert.assertEquals("Jones",list.get(0).getName());
+    }
+    @Test
+    public void testGetTrackByIdFailure(){
+
+        Track tracktest = new Track(10,"Jones","nice");
+        Track tracktest2 = new Track(11,"Gary","average");
+        trackRepository.save(tracktest);
+        trackRepository.save(tracktest2);
+        List<Track> list = trackRepository.findAll();
+        Assert.assertNotEquals("Jones1",list.get(0).getName());
+
     }
   }
+
+
 
 
